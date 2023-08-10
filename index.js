@@ -3,11 +3,11 @@ const PORT = 2000;
 const server = express();
 
 server.use(express.json());
-server.use(express.static("./Public"));
 
-const { userRoutes } = require("./routers");
+const { userRoutes, pokemonRoutes } = require("./routers");
 
 server.use("/user", userRoutes);
+server.use("/pokemon", pokemonRoutes);
 
 server.listen(PORT, () => {
   console.log("Success Running at PORT: " + PORT);

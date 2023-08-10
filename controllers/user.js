@@ -14,6 +14,12 @@ module.exports = {
 
       const hashPass = await bcrypt.hash(password, salt);
 
+      if (!username || !phoneNumber || !gender || !email || !password) {
+        return res.status(400).send({
+          message: "Form cannot be null",
+        });
+      }
+
       const existUser = data.user.find((user) => user.username === username);
       if (existUser) {
         return res.status(400).send({
@@ -56,11 +62,10 @@ module.exports = {
       const updateUser = data.user.filter(
         (user) => user.username !== nameDelete
       );
+
       data.user = updateUser;
 
       jsonfile.writeFileSync(dbFilePath, data);
-
-      const userExist = data.user;
 
       res.status(200).send("Delete Success");
     } catch (err) {
@@ -83,6 +88,11 @@ module.exports = {
       const getUser = req.params.username;
 
       const userBy = data.user.find((user) => user.username === getUser);
+      if (!userBy) {
+        return res.status(400).send({
+          message: "User not found",
+        });
+      }
 
       res.status(200).json(userBy);
     } catch (err) {
@@ -98,9 +108,16 @@ module.exports = {
 
       const newData = data.user.find((user) => user.username === updateData);
 
+      const existUser = data.user.find((user) => user.username === username);
       if (!newData) {
         return res.status(404).send({
           message: "User not found",
+        });
+      }
+
+      if (existUser) {
+        return res.status(400).send({
+          message: "Username already taken",
         });
       }
 
