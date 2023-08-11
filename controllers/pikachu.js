@@ -42,6 +42,10 @@ const renamePokemonWithFibonacci = (newName, count) => {
 };
 
 module.exports = {
+  isPrime,
+  getFibonacciNumber,
+  renamePokemonWithFibonacci,
+
   getAll: async (req, res) => {
     try {
       const response = await axios.get("https://pokeapi.co/api/v2/pokemon/");
@@ -60,15 +64,11 @@ module.exports = {
       );
       res.status(200).send(response.data);
     } catch (err) {
-      if (err.response && err.response.status === 404) {
-        res.status(404).send("Pokemon not found");
-      } else {
-        res.status(500).send("Error fetching Pokémon data");
-      }
+      res.status(404).send("Pokemon not found");
     }
   },
 
-  catch: async (req, res) => {
+  catchPokemon: async (req, res) => {
     try {
       const response = await axios.get("https://pokeapi.co/api/v2/pokemon/");
       const pokemons = response.data.results.map((pokemon) => pokemon.name);
@@ -96,13 +96,14 @@ module.exports = {
         });
       }
     } catch (err) {
-      res.status(400).send(err);
+      res.status(400).json(err);
     }
   },
 
   getMy: async (req, res) => {
     try {
-      const getData = data.pokemon;
+      // const getData = data.pokemon;
+      const getData = jsonfile.readFileSync(dbFilePath).pokemon;
       res.status(200).send(getData);
     } catch (err) {
       res.status(400).send(err);
