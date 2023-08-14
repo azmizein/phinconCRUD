@@ -5,8 +5,8 @@ const config = {
   development: {
     username: process.env.DEV_DB_USERNAME,
     password: process.env.DEV_DB_PASSWORD,
-    database: "phincon",
-    host: "127.0.0.1",
+    database: process.env.DB_HOST,
+    host: process.env.DB4,
     dialect: "mysql",
   },
   test: {
